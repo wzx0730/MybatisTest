@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+    <typeAlias alias="user" type="com.test.demo_ibatis.domain.User"/>
+    <!-- 查询 -->
+    <select id="getUser" parameterClass="java.lang.Integer" resultClass="user">
+        <![CDATA[
+		    select id,userName,passWord,realName from user where id = #id#
+		]]>
+    </select>
+    <!-- 插入 -->
+    <insert id="insertUser" parameterClass="user">
+        insert into user values(null,#userName#,#passWord#,#realName#)
+    </insert>
+    <!-- 更新 -->
+    <update id="updateUser"
+            parameterClass="user">
+        <![CDATA[
+			update user
+			SET userName=#userName#,passWord=#passWord#,realName=#realName#
+			WHERE id = #id#
+		]]>
+    </update>
+    <!-- 删除 -->
+    <delete id="deleteUser" parameterClass="java.lang.Integer">
+        delete from user where id = #id#
+    </delete>
+    <sql id="sql">
+        id,userName,passWord,realName
+    </sql>
+
+
+    <!--固定条件查找-->
+    <select id="queryByPassWordAndRealName" parameterClass="java.util.Map" resultClass="user">
+        select
+        <include refid="sql"/>
+        from user where passWord=#passWord#
+        and userName=#userName#
+    </select>
+
+    <!-- 根据name批量修改状态-->
+    <update id="updateByPassWordAndRealName" parameterClass="java.util.Map">
+
+        update user set
+        userName=#userName#
+        where id in
+        <iterate open="(" close=")" conjunction="," property="users" >
+            #users[].id#
+        </iterate>
+    </update>
+
+    <!--批量增加-->
+    <update id="insertBatch" parameterClass="java.util.List">
+
+        insert into user (userName,passWord,realName) values
+        <iterate conjunction="," >
+            (#[].userName#,#[].passWord#,#[].realName#)
+        </iterate>
+    </update>
+
+    <delete id="deleteByUserNameAndRealName" parameterClass="java.util.Map">
+        delete from user
+        where
+        userName=#userName#
+        and realName in
+        <iterate conjunction="," open="(" close=")" property="users">
+            #users[].realName#
+        </iterate>
+    </delete>
+
+    <select id="queryByDymatic" parameterClass="java.util.Map">
+        select
+        <include refid="sql"/>
+        from user
+        <dynamic prepend="where" >
+         <isNotNull property="userName" prepend="and">
+             userName=#userName#
+         </isNotNull>
+            <isNotNull  property="list" prepend="and">
+                <iterate property="list" open="id in (" close=")" conjunction=",">
+                    #list[]#
+                </iterate>
+            </isNotNull>
+
+
+        </dynamic>
+
+
+
+    </select>
+
+
+
+</sqlMap>
