@@ -28,7 +28,7 @@ public class MqConsumer {
         System.out.println("消费者1 massage  is "+msg);
     }
     @RabbitListener(bindings = {
-            @QueueBinding(value = @Queue,
+            @QueueBinding(value = @Queue("timeTest"),
                     exchange = @Exchange(value = "exchangeTest",type = "fanout")
             )})
     public void receive4(String msg) {

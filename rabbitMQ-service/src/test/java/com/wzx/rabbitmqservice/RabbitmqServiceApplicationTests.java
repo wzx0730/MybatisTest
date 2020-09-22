@@ -1,5 +1,6 @@
 package com.wzx.rabbitmqservice;
 
+import com.wzx.rabbitmqservice.service.MqProducer;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +25,10 @@ class RabbitmqServiceApplicationTests {
         rabbitTemplate.convertAndSend("topic","user.save" ,"topic的模型发送user" );
     }
 
+    @Autowired
+    MqProducer mqProducer;
+    @Test
+    void testSendTimeMsg(){
+        mqProducer.sendTimeMsg();
+    }
 }
