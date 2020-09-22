@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://E:/Workspace/demo_ibatis/demo_ibatis.iml" filepath="E:/Workspace/demo_ibatis/demo_ibatis.iml" />
+      <module fileurl="file://E:/Workspace/demo_ibatis/rabbitMQ-service/rabbitMQ-service.iml" filepath="E:/Workspace/demo_ibatis/rabbitMQ-service/rabbitMQ-service.iml" />
     </modules>
   </component>
 </project>
