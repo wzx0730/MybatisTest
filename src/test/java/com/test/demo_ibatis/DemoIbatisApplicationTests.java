@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.test.demo_ibatis.Dao.UserDao;
 import com.test.demo_ibatis.config.MySqlConfig;
+import com.test.demo_ibatis.config.RabbitMQConfig;
 import com.test.demo_ibatis.domain.Myclient;
 import com.test.demo_ibatis.domain.User;
 import com.test.demo_ibatis.domain.UserVIP;
@@ -13,6 +14,11 @@ import com.test.demo_ibatis.service.UserService;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -208,5 +214,30 @@ class DemoIbatisApplicationTests {
 
         }
 
+        @Autowired
+        private AmqpAdmin amqpAdmin;
+
+        @Autowired
+        private RabbitTemplate rabbitTemplate;
+
+
+        @Test
+        void TestMq(){
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,
+                    RabbitMQConfig.ROUTING_KEY, "hello world");
+
+
+        }
+
+    @Test
+    void TestMqREV(){
+        Message receive = rabbitTemplate.receive("spring-boot-queue");
+
+
+        if (receive!=null){
+            System.out.println(receive.toString());
+        }
+
+    }
 
 }
