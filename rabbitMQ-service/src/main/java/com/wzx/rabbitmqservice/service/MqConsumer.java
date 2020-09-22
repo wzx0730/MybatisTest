@@ -50,6 +50,6 @@ public class MqConsumer {
                     key = {"order.#"}
             )})
     public void receive6(String msg) {
-        System.out.println("topic消费者2 massage  is "+msg);
+        System.out.println("topic消费者 massage  is "+msg);
     }
 }
